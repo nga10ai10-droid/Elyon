@@ -1,0 +1,138 @@
+# ELYON Professional Gym Website Configuration v3.1.0
+
+# Enable compression for better performance
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE application/manifest+json
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# Cache headers for optimal performance
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # CSS and JavaScript - 1 month
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/x-javascript "access plus 1 month"
+
+    # Images - 1 year
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpg "access plus 1 year" 
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+
+    # Fonts - 1 year
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+
+    # Manifest and service worker - 1 week
+    ExpiresByType application/manifest+json "access plus 1 week"
+    ExpiresByType application/x-web-app-manifest+json "access plus 1 week"
+
+    # HTML - 1 day
+    ExpiresByType text/html "access plus 1 day"
+</IfModule>
+
+# Security headers for professional website
+<IfModule mod_headers.c>
+    # Prevent framing (clickjacking protection)
+    Header always set X-Frame-Options DENY
+
+    # Prevent MIME sniffing
+    Header always set X-Content-Type-Options nosniff
+
+    # XSS protection
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # Referrer policy
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Content Security Policy (basic)
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' fonts.googleapis.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' data:; connect-src 'self'"
+
+    # CORS for fonts and assets
+    <FilesMatch "\.(ttf|ttc|otf|eot|woff|woff2|png|jpg|jpeg|gif|webp|svg)$">
+        Header set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+
+    # Remove server signature
+    Header unset Server
+    Header unset X-Powered-By
+</IfModule>
+
+# URL rewriting and redirects
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Force HTTPS (uncomment for production)
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Force www (optional, uncomment if needed)
+    # RewriteCond %{HTTP_HOST} !^www\.
+    # RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Handle service worker
+    RewriteRule ^sw\.js$ /sw.js [L]
+
+    # Handle manifest
+    RewriteRule ^manifest\.json$ /manifest.json [L]
+
+    # Pretty URLs for sections
+    RewriteRule ^productos/?$ /#productos [L,R=301]
+    RewriteRule ^contacto/?$ /#contacto [L,R=301]
+    RewriteRule ^tallas/?$ /#guia-tallas [L,R=301]
+
+    # Handle 404 errors (optional)
+    # ErrorDocument 404 /404.html
+</IfModule>
+
+# MIME types
+<IfModule mod_mime.c>
+    # Web fonts
+    AddType application/font-woff .woff
+    AddType application/font-woff2 .woff2
+    AddType application/vnd.ms-fontobject .eot
+    AddType font/ttf .ttf
+    AddType font/otf .otf
+
+    # Manifest
+    AddType application/manifest+json .webmanifest
+    AddType application/x-web-app-manifest+json .webapp
+
+    # Media types
+    AddType image/webp .webp
+    AddType image/svg+xml .svg
+
+    # Text types
+    AddType text/css .css
+    AddType application/javascript .js
+</IfModule>
+
+# Prevent access to sensitive files
+<FilesMatch "\.(env|log|git|htaccess|htpasswd|ini|conf|sql|fla|psd|sh)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Optimize file serving
+<IfModule mod_deflate.c>
+    SetOutputFilter DEFLATE
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \.(?:exe|t?gz|zip|bz2|sit|rar)$ no-gzip dont-vary
+</IfModule>

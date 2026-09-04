@@ -1,0 +1,58 @@
+{
+  "name": "ELYON - Professional Gym Apparel",
+  "short_name": "ELYON",
+  "description": "Ropa deportiva premium para atletas profesionales de bodybuilding y fitness",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "es",
+  "dir": "ltr",
+  "categories": ["shopping", "fitness", "lifestyle", "sports"],
+  "icons": [
+    {
+      "src": "./images/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/favicon-32x32.png", 
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/logo-small.png",
+      "sizes": "100x100",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/logo.png",
+      "sizes": "200x200",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Ver Productos",
+      "short_name": "Productos",
+      "description": "Explorar toda la colección profesional ELYON",
+      "url": "/#productos",
+      "icons": [{ "src": "./images/logo-small.png", "sizes": "100x100" }]
+    },
+    {
+      "name": "Carrito",
+      "short_name": "Carrito", 
+      "description": "Ver carrito de compras",
+      "url": "/#carrito",
+      "icons": [{ "src": "./images/logo-small.png", "sizes": "100x100" }]
+    }
+  ]
+}

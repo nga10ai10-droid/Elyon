@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.elyon.com/sitemap.xml
+
+# Disallow sensitive areas
+Disallow: /admin/
+Disallow: /checkout/
+Disallow: /cart/
+Disallow: /_private/
+Disallow: /sw.js
+
+# Allow important pages
+Allow: /css/
+Allow: /js/
+Allow: /images/
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1
+
+# ELYON - Professional Gym Fitness Apparel
+# Premium bodybuilding and fitness clothing

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELYON - Ropa Deportiva Premium para Bodybuilding | Gimnasio Profesional</title>
+    <meta name="description" content="ELYON - Marca premium de ropa deportiva para bodybuilding y fitness. Diseñada por atletas profesionales, para atletas serios.">
+    <meta name="keywords" content="ropa deportiva, bodybuilding, fitness, gym wear, elyon, apparel premium, entrenamiento">
+    <meta name="author" content="ELYON">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.elyon.com/">
+    <meta property="og:title" content="ELYON - Ropa Deportiva Premium para Gimnasio">
+    <meta property="og:description" content="Diseñada por atletas, para atletas. Descubre nuestra colección premium.">
+    <meta property="og:image" content="./images/logo.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.elyon.com/">
+    <meta property="twitter:title" content="ELYON - Professional Fitness Apparel">
+    <meta property="twitter:description" content="Ropa deportiva premium para atletas profesionales.">
+    <meta property="twitter:image" content="./images/logo.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="./manifest.json">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./css/style.css">
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ClothingStore",
+      "name": "ELYON",
+      "description": "Ropa deportiva premium para bodybuilding y fitness profesional",
+      "url": "https://www.elyon.com",
+      "logo": "./images/logo.png",
+      "sameAs": [
+        "https://www.instagram.com/elyon_fitness",
+        "https://www.facebook.com/elyon_fitness"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "ES"
+      },
+      "priceRange": "€€€",
+      "category": "Sportswear, Fitness Apparel, Bodybuilding Clothing"
+    }
+    </script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading-screen" aria-hidden="true">
+        <div class="loader">
+            <img src="./images/logo.png" alt="ELYON Logo" class="loader-logo">
+            <div class="loader-text">ELYON</div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <nav class="nav" role="navigation" aria-label="Navegación principal">
+                <div class="nav-brand">
+                    <img src="./images/logo.png" alt="ELYON Logo" class="logo">
+                    <a href="#inicio" class="brand-text" aria-label="ELYON - Inicio">ELYON</a>
+                </div>
+                <ul class="nav-menu" id="nav-menu" role="menubar">
+                    <li role="none"><a href="#inicio" class="nav-link active" role="menuitem">Inicio</a></li>
+                    <li role="none"><a href="#productos" class="nav-link" role="menuitem">Productos</a></li>
+                    <li role="none"><a href="#sobre-nosotros" class="nav-link" role="menuitem">Nosotros</a></li>
+                    <li role="none"><a href="#guia-tallas" class="nav-link" role="menuitem">Tallas</a></li>
+                    <li role="none"><a href="#contacto" class="nav-link" role="menuitem">Contacto</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button class="search-btn" id="search-btn" aria-label="Buscar productos" type="button">
+                        <span aria-hidden="true">🔍</span>
+                    </button>
+                    <button class="cart-button" id="cart-button" aria-label="Carrito de compras" type="button">
+                        <span aria-hidden="true">🛒</span>
+                        <span class="cart-count" id="cart-count" aria-live="polite">0</span>
+                    </button>
+                    <button class="nav-toggle" id="nav-toggle" aria-label="Menú de navegación" aria-expanded="false" type="button">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero" id="inicio" aria-label="Presentación principal">
+            <div class="hero-background" aria-hidden="true">
+                <div class="hero-overlay"></div>
+            </div>
+            <div class="hero-content">
+                <div class="hero-title">
+                    <img src="./images/logo.png" alt="ELYON Logo" class="hero-logo">
+                    <h1 class="brand-name">ELYON</h1>
+                    <span class="subtitle">ROPA DEPORTIVA PREMIUM</span>
+                </div>
+                <p class="hero-description">
+                    Diseñada por <strong>atletas profesionales</strong>. Construida para el <strong>máximo rendimiento</strong>.
+                    <br>Eleva tu entrenamiento con la calidad premium que mereces y la funcionalidad que necesitas.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn--primary btn--lg hero-cta" onclick="scrollToSection('productos')" type="button">
+                        VER PRODUCTOS
+                    </button>
+                    <button class="btn btn--secondary btn--lg" onclick="scrollToSection('sobre-nosotros')" type="button">
+                        CONOCE MÁS
+                    </button>
+                </div>
+            </div>
+            <div class="hero-scroll-indicator" onclick="scrollToSection('caracteristicas')" role="button" tabindex="0" aria-label="Desplazarse hacia abajo">
+                <div class="scroll-arrow" aria-hidden="true"></div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features" id="caracteristicas" aria-label="Características del producto">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">CARACTERÍSTICAS PREMIUM</h2>
+                    <p class="section-subtitle">Tecnología avanzada y diseño superior para atletas profesionales</p>
+                </div>
+                <div class="features-grid">
+                    <article class="feature-card glass-card">
+                        <span class="feature-icon" aria-hidden="true">💪</span>
+                        <h3>Performance Superior</h3>
+                        <p>Diseñada específicamente para entrenamientos intensos de bodybuilding con materiales que se adaptan a cada movimiento y proporcionan el soporte necesario para maximizar tu rendimiento.</p>
+                    </article>
+                    <article class="feature-card glass-card">
+                        <span class="feature-icon" aria-hidden="true">🏆</span>
+                        <h3>Calidad Profesional</h3>
+                        <p>Confeccionada con los mejores materiales y técnicas utilizadas por las marcas deportivas más prestigiosas del mundo. Cada prenda pasa por rigurosos controles de calidad.</p>
+                    </article>
+                    <article class="feature-card glass-card">
+                        <span class="feature-icon" aria-hidden="true">⚡</span>
+                        <h3>Tecnología Avanzada</h3>
+                        <p>Incorpora las últimas innovaciones en tejidos técnicos: absorción de humedad, transpirabilidad superior, protección UV y resistencia al desgaste intensivo.</p>
+                    </article>
+                    <article class="feature-card glass-card">
+                        <span class="feature-icon" aria-hidden="true">🎯</span>
+                        <h3>Ajuste Perfecto</h3>
+                        <p>Diseño ergonómico desarrollado con atletas profesionales para garantizar libertad de movimiento total, compresión estratégica y comodidad durante entrenamientos extremos.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section class="products" id="productos" aria-label="Catálogo de productos">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">COLECCIÓN PROFESIONAL</h2>
+                    <p class="section-subtitle">Descubre nuestra gama completa de ropa deportiva premium para atletas serios</p>
+                </div>
+
+                <!-- Product Categories Filter -->
+                <div class="product-filters" role="tablist" aria-label="Filtros de productos">
+                    <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true" type="button">TODOS</button>
+                    <button class="filter-btn" data-filter="tank-tops" role="tab" aria-selected="false" type="button">TANK TOPS</button>
+                    <button class="filter-btn" data-filter="hoodies" role="tab" aria-selected="false" type="button">SUDADERAS</button>
+                    <button class="filter-btn" data-filter="shorts" role="tab" aria-selected="false" type="button">SHORTS</button>
+                    <button class="filter-btn" data-filter="t-shirts" role="tab" aria-selected="false" type="button">CAMISETAS</button>
+                    <button class="filter-btn" data-filter="leggings" role="tab" aria-selected="false" type="button">LEGGINGS</button>
+                </div>
+
+                <div class="products-grid" id="products-grid" role="region" aria-live="polite" aria-label="Productos disponibles">
+                    <!-- Los productos se cargarán dinámicamente con JavaScript -->
+                </div>
+
+                <div class="products-cta">
+                    <button class="btn btn--primary btn--lg" type="button">VER CATÁLOGO COMPLETO</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about" id="sobre-nosotros" aria-label="Información sobre la empresa">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text glass-card">
+                        <h2 class="section-title" style="text-align: left; margin-bottom: 2rem;">SOBRE ELYON</h2>
+                        <p class="about-description">
+                            <strong>ELYON</strong> nace de la pasión por la excelencia en el bodybuilding profesional. 
+                            Nuestro nombre, que significa "Supremo", refleja nuestro compromiso inquebrantable 
+                            con la calidad superior y la innovación constante en el mundo del fitness.
+                        </p>
+                        <p style="font-size: 1rem; color: #64748b; margin-bottom: 2rem;">
+                            Fundada por atletas profesionales, cada prenda es meticulosamente diseñada y testada 
+                            en los gimnasios más exigentes del mundo. Utilizamos únicamente materiales premium 
+                            y las técnicas de confección más avanzadas para crear ropa que no solo luce 
+                            profesional, sino que potencia tu rendimiento al máximo nivel.
+                        </p>
+                        <p style="font-size: 1rem; color: #64748b; margin-bottom: 3rem;">
+                            Nuestro compromiso va más allá de la ropa: es sobre crear una comunidad de atletas 
+                            dedicados que buscan la excelencia en cada entrenamiento, cada repetición, cada logro.
+                        </p>
+                        <div class="about-stats">
+                            <div class="stat">
+                                <span class="stat-number">100%</span>
+                                <span class="stat-label">Calidad Premium</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">25k+</span>
+                                <span class="stat-label">Atletas Confían</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">5★</span>
+                                <span class="stat-label">Valoración Media</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-image" aria-hidden="true">
+                        <!-- Placeholder para imagen de gimnasio/atletas -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Size Guide Section -->
+        <section class="size-guide" id="guia-tallas" style="padding: 6rem 0; background: #ffffff;" aria-label="Guía de tallas">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">GUÍA DE TALLAS</h2>
+                    <p class="section-subtitle">Encuentra tu ajuste perfecto con nuestro sistema de medidas profesional</p>
+                </div>
+
+                <div class="size-tables" style="display: grid; grid-template-columns: 1fr; gap: 3rem;">
+                    <div class="size-table-container glass-card" style="padding: 2.5rem;">
+                        <h3 style="text-align: center; margin-bottom: 2rem; color: #0f172a; font-size: 1.4rem; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 1px;">PARTE SUPERIOR</h3>
+                        <div style="overflow-x: auto;">
+                            <table class="size-table" style="width: 100%; border-collapse: collapse; background: rgba(255,255,255,0.5); border-radius: 12px; overflow: hidden;">
+                                <caption class="sr-only">Tabla de tallas para parte superior del cuerpo</caption>
+                                <thead style="background: rgba(59, 130, 246, 0.1);">
+                                    <tr>
+                                        <th scope="col" style="padding: 1rem; text-align: center; color: #0f172a; font-weight: 700; border-bottom: 1px solid rgba(203,213,225,0.3); font-family: 'Oswald', sans-serif;">TALLA</th>
+                                        <th scope="col" style="padding: 1rem; text-align: center; color: #0f172a; font-weight: 700; border-bottom: 1px solid rgba(203,213,225,0.3); font-family: 'Oswald', sans-serif;">PECHO (CM)</th>
+                                        <th scope="col" style="padding: 1rem; text-align: center; color: #0f172a; font-weight: 700; border-bottom: 1px solid rgba(203,213,225,0.3); font-family: 'Oswald', sans-serif;">CINTURA (CM)</th>
+                                        <th scope="col" style="padding: 1rem; text-align: center; color: #0f172a; font-weight: 700; border-bottom: 1px solid rgba(203,213,225,0.3); font-family: 'Oswald', sans-serif;">LARGO (CM)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row" style="padding: 1rem; text-align: center; color: #475569; font-weight: 600; border-bottom: 1px solid rgba(203,213,225,0.2);">XS</th>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">84-89</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">74-79</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">66</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="padding: 1rem; text-align: center; color: #475569; font-weight: 600; border-bottom: 1px solid rgba(203,213,225,0.2);">S</th>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">89-94</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">79-84</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">68</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="padding: 1rem; text-align: center; color: #475569; font-weight: 600; border-bottom: 1px solid rgba(203,213,225,0.2);">M</th>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">94-99</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">84-89</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">70</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="padding: 1rem; text-align: center; color: #475569; font-weight: 600; border-bottom: 1px solid rgba(203,213,225,0.2);">L</th>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">99-104</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">89-94</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">72</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="padding: 1rem; text-align: center; color: #475569; font-weight: 600; border-bottom: 1px solid rgba(203,213,225,0.2);">XL</th>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">104-109</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">94-99</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">74</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="padding: 1rem; text-align: center; color: #475569; font-weight: 600;">XXL</th>
+                                        <td style="padding: 1rem; text-align: center; color: #475569;">109-114</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569;">99-104</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569;">76</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="size-table-container glass-card" style="padding: 2.5rem;">
+                        <h3 style="text-align: center; margin-bottom: 2rem; color: #0f172a; font-size: 1.4rem; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 1px;">PARTE INFERIOR</h3>
+                        <div style="overflow-x: auto;">
+                            <table class="size-table" style="width: 100%; border-collapse: collapse; background: rgba(255,255,255,0.5); border-radius: 12px; overflow: hidden;">
+                                <caption class="sr-only">Tabla de tallas para parte inferior del cuerpo</caption>
+                                <thead style="background: rgba(59, 130, 246, 0.1);">
+                                    <tr>
+                                        <th scope="col" style="padding: 1rem; text-align: center; color: #0f172a; font-weight: 700; border-bottom: 1px solid rgba(203,213,225,0.3); font-family: 'Oswald', sans-serif;">TALLA</th>
+                                        <th scope="col" style="padding: 1rem; text-align: center; color: #0f172a; font-weight: 700; border-bottom: 1px solid rgba(203,213,225,0.3); font-family: 'Oswald', sans-serif;">CINTURA (CM)</th>
+                                        <th scope="col" style="padding: 1rem; text-align: center; color: #0f172a; font-weight: 700; border-bottom: 1px solid rgba(203,213,225,0.3); font-family: 'Oswald', sans-serif;">CADERA (CM)</th>
+                                        <th scope="col" style="padding: 1rem; text-align: center; color: #0f172a; font-weight: 700; border-bottom: 1px solid rgba(203,213,225,0.3); font-family: 'Oswald', sans-serif;">LARGO (CM)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row" style="padding: 1rem; text-align: center; color: #475569; font-weight: 600; border-bottom: 1px solid rgba(203,213,225,0.2);">XS</th>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">74-79</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">89-94</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">38</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="padding: 1rem; text-align: center; color: #475569; font-weight: 600; border-bottom: 1px solid rgba(203,213,225,0.2);">S</th>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">79-84</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">94-99</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">40</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="padding: 1rem; text-align: center; color: #475569; font-weight: 600; border-bottom: 1px solid rgba(203,213,225,0.2);">M</th>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">84-89</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">99-104</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">42</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="padding: 1rem; text-align: center; color: #475569; font-weight: 600; border-bottom: 1px solid rgba(203,213,225,0.2);">L</th>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">89-94</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">104-109</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">44</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="padding: 1rem; text-align: center; color: #475569; font-weight: 600; border-bottom: 1px solid rgba(203,213,225,0.2);">XL</th>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">94-99</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">109-114</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569; border-bottom: 1px solid rgba(203,213,225,0.2);">46</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="padding: 1rem; text-align: center; color: #475569; font-weight: 600;">XXL</th>
+                                        <td style="padding: 1rem; text-align: center; color: #475569;">99-104</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569;">114-119</td>
+                                        <td style="padding: 1rem; text-align: center; color: #475569;">48</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact" id="contacto" style="padding: 6rem 0; background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);" aria-label="Información de contacto">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">CONTACTO PROFESIONAL</h2>
+                    <p class="section-subtitle">¿Tienes preguntas? Nuestro equipo especializado está aquí para ayudarte</p>
+                </div>
+
+                <div class="contact-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start;">
+                    <div class="contact-info glass-card" style="padding: 2.5rem;">
+                        <div class="contact-item" style="display: flex; gap: 1.5rem; align-items: flex-start; margin-bottom: 2rem;">
+                            <div class="contact-icon" style="font-size: 1.5rem; margin-top: 0.5rem; color: #3b82f6;" aria-hidden="true">📧</div>
+                            <div class="contact-details">
+                                <h3 style="color: #0f172a; margin-bottom: 1rem; font-size: 1.2rem; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 1px;">EMAIL</h3>
+                                <p style="color: #1e40af; margin-bottom: 0.5rem; font-weight: 600;"><a href="mailto:info@elyon.com">info@elyon.com</a></p>
+                                <p style="color: #475569; margin: 0;"><a href="mailto:support@elyon.com">support@elyon.com</a></p>
+                            </div>
+                        </div>
+                        <div class="contact-item" style="display: flex; gap: 1.5rem; align-items: flex-start; margin-bottom: 2rem;">
+                            <div class="contact-icon" style="font-size: 1.5rem; margin-top: 0.5rem; color: #3b82f6;" aria-hidden="true">📱</div>
+                            <div class="contact-details">
+                                <h3 style="color: #0f172a; margin-bottom: 1rem; font-size: 1.2rem; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 1px;">TELÉFONO</h3>
+                                <p style="color: #1e40af; margin-bottom: 0.5rem; font-weight: 600;"><a href="tel:+34900123456">+34 900 123 456</a></p>
+                                <p style="color: #475569; margin: 0;">Lun-Vie 9:00-18:00</p>
+                            </div>
+                        </div>
+                        <div class="contact-item" style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                            <div class="contact-icon" style="font-size: 1.5rem; margin-top: 0.5rem; color: #3b82f6;" aria-hidden="true">🌐</div>
+                            <div class="contact-details">
+                                <h3 style="color: #0f172a; margin-bottom: 1rem; font-size: 1.2rem; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 1px;">REDES</h3>
+                                <div class="social-links" style="display: flex; gap: 1rem;">
+                                    <a href="#" class="social-link" style="color: #1e40af; text-decoration: none; font-weight: 600; transition: color 0.3s ease;" aria-label="Instagram">Instagram</a>
+                                    <a href="#" class="social-link" style="color: #1e40af; text-decoration: none; font-weight: 600; transition: color 0.3s ease;" aria-label="Facebook">Facebook</a>
+                                    <a href="#" class="social-link" style="color: #1e40af; text-decoration: none; font-weight: 600; transition: color 0.3s ease;" aria-label="YouTube">YouTube</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form class="contact-form glass-card" id="contact-form" style="padding: 2.5rem;" novalidate>
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label for="name" style="display: block; margin-bottom: 0.8rem; color: #0f172a; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; font-family: 'Oswald', sans-serif;">NOMBRE *</label>
+                            <input type="text" id="name" name="name" required aria-required="true" style="width: 100%; padding: 1rem; border: 2px solid rgba(203, 213, 225, 0.5); border-radius: 8px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(4px); color: #1e293b; font-size: 1rem; transition: all 0.3s ease;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label for="email" style="display: block; margin-bottom: 0.8rem; color: #0f172a; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; font-family: 'Oswald', sans-serif;">EMAIL *</label>
+                            <input type="email" id="email" name="email" required aria-required="true" style="width: 100%; padding: 1rem; border: 2px solid rgba(203, 213, 225, 0.5); border-radius: 8px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(4px); color: #1e293b; font-size: 1rem; transition: all 0.3s ease;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label for="subject" style="display: block; margin-bottom: 0.8rem; color: #0f172a; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; font-family: 'Oswald', sans-serif;">ASUNTO</label>
+                            <select id="subject" name="subject" style="width: 100%; padding: 1rem; border: 2px solid rgba(203, 213, 225, 0.5); border-radius: 8px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(4px); color: #1e293b; font-size: 1rem; transition: all 0.3s ease;">
+                                <option value="general">Consulta General</option>
+                                <option value="orders">Pedidos</option>
+                                <option value="returns">Devoluciones</option>
+                                <option value="wholesale">Ventas al Mayor</option>
+                                <option value="sponsorship">Patrocinios Atletas</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 2rem;">
+                            <label for="message" style="display: block; margin-bottom: 0.8rem; color: #0f172a; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; font-family: 'Oswald', sans-serif;">MENSAJE *</label>
+                            <textarea id="message" name="message" rows="5" required aria-required="true" style="width: 100%; padding: 1rem; border: 2px solid rgba(203, 213, 225, 0.5); border-radius: 8px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(4px); color: #1e293b; font-size: 1rem; resize: vertical; min-height: 120px; transition: all 0.3s ease;"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--lg" style="width: 100%;">ENVIAR MENSAJE</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 4rem 0 2rem; border-top: 1px solid rgba(71, 85, 105, 0.3);">
+        <div class="container">
+            <div class="footer-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 3rem; margin-bottom: 3rem;">
+                <div class="footer-section">
+                    <div class="footer-brand" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <img src="./images/logo.png" alt="ELYON Logo" class="footer-logo" style="width: 60px; height: 60px; filter: brightness(0) invert(1);">
+                            <h3 style="font-family: 'Oswald', sans-serif; font-size: 2rem; color: #ffffff; font-weight: 800; letter-spacing: 2px; margin: 0; text-transform: uppercase;">ELYON</h3>
+                        </div>
+                        <p style="color: #94a3b8; margin: 0; font-size: 1rem;">Ropa deportiva premium para atletas profesionales de bodybuilding y fitness</p>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4 style="color: #ffffff; margin-bottom: 1.5rem; font-size: 1.2rem; font-weight: 600; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 1px;">PRODUCTOS</h4>
+                    <ul style="list-style: none; margin: 0; padding: 0;">
+                        <li style="margin-bottom: 0.8rem;"><a href="#productos" style="color: #94a3b8; text-decoration: none; transition: color 0.3s ease; font-size: 1rem;">Tank Tops Premium</a></li>
+                        <li style="margin-bottom: 0.8rem;"><a href="#productos" style="color: #94a3b8; text-decoration: none; transition: color 0.3s ease; font-size: 1rem;">Sudaderas Profesionales</a></li>
+                        <li style="margin-bottom: 0.8rem;"><a href="#productos" style="color: #94a3b8; text-decoration: none; transition: color 0.3s ease; font-size: 1rem;">Shorts de Entrenamiento</a></li>
+                        <li style="margin-bottom: 0.8rem;"><a href="#productos" style="color: #94a3b8; text-decoration: none; transition: color 0.3s ease; font-size: 1rem;">Camisetas Técnicas</a></li>
+                        <li><a href="#productos" style="color: #94a3b8; text-decoration: none; transition: color 0.3s ease; font-size: 1rem;">Leggings de Compresión</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 style="color: #ffffff; margin-bottom: 1.5rem; font-size: 1.2rem; font-weight: 600; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 1px;">INFORMACIÓN</h4>
+                    <ul style="list-style: none; margin: 0; padding: 0;">
+                        <li style="margin-bottom: 0.8rem;"><a href="#guia-tallas" style="color: #94a3b8; text-decoration: none; transition: color 0.3s ease; font-size: 1rem;">Guía de Tallas</a></li>
+                        <li style="margin-bottom: 0.8rem;"><a href="#sobre-nosotros" style="color: #94a3b8; text-decoration: none; transition: color 0.3s ease; font-size: 1rem;">Sobre Nosotros</a></li>
+                        <li style="margin-bottom: 0.8rem;"><a href="#" style="color: #94a3b8; text-decoration: none; transition: color 0.3s ease; font-size: 1rem;">Envíos y Devoluciones</a></li>
+                        <li style="margin-bottom: 0.8rem;"><a href="#" style="color: #94a3b8; text-decoration: none; transition: color 0.3s ease; font-size: 1rem;">Programa de Atletas</a></li>
+                        <li><a href="#" style="color: #94a3b8; text-decoration: none; transition: color 0.3s ease; font-size: 1rem;">Términos y Condiciones</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 style="color: #ffffff; margin-bottom: 1.5rem; font-size: 1.2rem; font-weight: 600; font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 1px;">NEWSLETTER</h4>
+                    <p style="color: #94a3b8; margin-bottom: 2rem; font-size: 1rem;">Suscríbete para recibir ofertas exclusivas y novedades</p>
+                    <form class="newsletter-form" id="newsletter-form" style="display: flex; gap: 1rem; margin-bottom: 2rem;" novalidate>
+                        <label for="newsletter-email" class="sr-only">Email para newsletter</label>
+                        <input type="email" id="newsletter-email" placeholder="Tu email profesional" required aria-required="true" style="flex: 1; padding: 0.75rem; border: 2px solid #334155; border-radius: 6px; background: #1e293b; color: #ffffff; font-size: 0.9rem;">
+                        <button type="submit" class="btn btn--primary">SUSCRIBIR</button>
+                    </form>
+                    <div class="social-icons" style="display: flex; gap: 1.5rem;">
+                        <a href="#" aria-label="Instagram" style="color: #94a3b8; font-size: 1.5rem; transition: color 0.3s ease;">📷</a>
+                        <a href="#" aria-label="Facebook" style="color: #94a3b8; font-size: 1.5rem; transition: color 0.3s ease;">📘</a>
+                        <a href="#" aria-label="YouTube" style="color: #94a3b8; font-size: 1.5rem; transition: color 0.3s ease;">📺</a>
+                        <a href="#" aria-label="TikTok" style="color: #94a3b8; font-size: 1.5rem; transition: color 0.3s ease;">🎵</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; border-top: 1px solid #334155; flex-wrap: wrap; gap: 1.5rem;">
+                <p style="color: #64748b; margin: 0; font-size: 0.9rem;">&copy; 2025 ELYON. Todos los derechos reservados. Diseñado para atletas profesionales.</p>
+                <div class="payment-methods" style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+                    <span style="color: #94a3b8; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">💳 Visa</span>
+                    <span style="color: #94a3b8; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">💳 Mastercard</span>
+                    <span style="color: #94a3b8; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">💰 PayPal</span>
+                    <span style="color: #94a3b8; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">📱 Apple Pay</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Modal -->
+    <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="cart-title"></div>
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-header">
+            <h3 id="cart-title">CARRITO DE COMPRAS</h3>
+            <button class="modal-close" id="modal-close" aria-label="Cerrar carrito" type="button">&times;</button>
+        </div>
+        <div class="cart-body" id="cart-items" aria-live="polite">
+            <!-- Los items del carrito se cargarán aquí -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total" aria-live="polite">
+                <strong>TOTAL: <span id="cart-total">€0.00</span></strong>
+            </div>
+            <div class="cart-actions">
+                <button class="btn btn--secondary" id="close-cart" type="button">SEGUIR COMPRANDO</button>
+                <button class="btn btn--primary" id="checkout-btn" type="button">FINALIZAR COMPRA</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="back-to-top" aria-label="Volver arriba" type="button">
+        ↑
+    </button>
+
+    <!-- JavaScript -->
+    <script src="./js/app.js"></script>
+
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="sr-only" style="position: absolute; top: -40px; left: 6px; background: #3b82f6; color: white; padding: 8px; text-decoration: none; z-index: 10000; transition: top 0.3s;">Saltar al contenido principal</a>
+</body>
+</html>
