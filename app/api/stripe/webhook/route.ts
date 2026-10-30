@@ -1,0 +1,5 @@
+import {HttpError,responseError,setting} from '@/lib/commerce';
+import {reconcile,type CheckoutSession} from '@/lib/stripe';
+import {verifyStripeSignature} from '@/lib/stripe-signature';
+import {processOrderEmails} from '@/lib/email';
+export async function POST(request:Request){try{const secret=setting('STRIPE_WEBHOOK_SECRET');if(!secret)throw new HttpError(503,'Webhook no configurado.');if(Number(request.headers.get('content-length')||0)>262144)throw new HttpError(413,'Evento demasiado grande.');const raw=await request.text();if(raw.length>262144||!await verifyStripeSignature(raw,request.headers.get('stripe-signature')||'',secret))throw new HttpError(400,'Firma de Stripe inválida.');const event=JSON.parse(raw) as {type:string;data:{object:CheckoutSession}};if(['checkout.session.completed','checkout.session.expired','checkout.session.async_payment_succeeded'].includes(event.type)){const orderId=await reconcile(event.data.object);if(orderId)await processOrderEmails(orderId)}return Response.json({received:true})}catch(e){return responseError(e)}}

@@ -1,0 +1,4 @@
+import {z} from 'zod';
+import {publicConfig,database,HttpError,rateLimit,readBody,responseError,sameOrigin} from '@/lib/commerce';
+const input=z.object({email:z.string().email().max(200),consent:z.literal(true),website:z.string().max(0)}).strict();
+export async function POST(request:Request){try{sameOrigin(request);if(!(await publicConfig()).contactReady)throw new HttpError(503,'Las suscripciones se abrirán cuando publiquemos la política de privacidad definitiva.');await rateLimit(request,'newsletter',3);const p=input.safeParse(await readBody(request));if(!p.success)throw new HttpError(400,'Revisa el correo y tu consentimiento.');await database().prepare('INSERT INTO subscribers (email,consent_version,created) VALUES (?,?,?) ON CONFLICT(email) DO NOTHING').bind(p.data.email.toLowerCase(),'privacy-v1',Date.now()).run();return Response.json({ok:true})}catch(e){return responseError(e)}}

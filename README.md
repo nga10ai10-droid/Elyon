@@ -1,252 +1,41 @@
-# ELYON - Professional Gym Website (MEJORADO)
+# ELYON · tienda online
 
-> 🏋️ **Ropa deportiva premium diseñada por atletas profesionales, para atletas serios.**
+Aplicación full-stack para el catálogo y venta de ropa deportiva ELYON. Incluye catálogo de cuatro columnas, fichas por color y talla, inventario transaccional, carrito persistente, pedidos, checkout con Stripe, cuenta privada con Firebase, panel de administración, borradores legales y cola de confirmaciones por correo.
 
-## 🎯 **VERSIÓN CORREGIDA - Todos los fallos arreglados**
+## Antes de abrir las ventas
 
-### ✅ **Problemas Solucionados Completamente:**
+Entra en `/admin` y revisa el apartado **Lanzamiento**. La tienda debe permanecer con `COMMERCE_MODE=preview` hasta que el panel muestre que prendas, stock, pagos y correos están preparados. Los textos legales están en `lib/legal.ts`.
 
-**1. ✅ Scroll Suave Arreglado:**
-- Función `Utils.scrollTo()` completamente reescrita
-- Manejo de errores robusto con fallbacks
-- Compatible con todos los navegadores modernos
-- Promise-based para mejor control de flujo
-- Scroll padding mejorado en CSS
+No pongas claves en el ZIP ni en el repositorio. Configúralas únicamente en el entorno de alojamiento:
 
-**2. ✅ Logo en Título Principal:**
-- Logo real procesado y optimizado
-- 5 versiones diferentes (16px a 200px)
-- Integrado prominentemente en hero section
-- Consistente en header y footer
+- `ADMIN_EMAIL` o `ADMIN_USER_ID`: persona autorizada para administrar. `ADMIN_EXTRA_EMAIL` permite añadir una segunda cuenta sin retirar el acceso de la primera; la cuenta debe iniciar sesión con Firebase usando esa dirección.
+- `SITE_ORIGIN`: dominio público definitivo, con `https://`.
+- `SUPPORT_EMAIL` e `INSTAGRAM_URL`: contacto visible.
+- `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` y `SHIPPING_CENTS`: cobro y portes.
+- `RESEND_API_KEY` y `EMAIL_FROM`: confirmaciones de pedido y envío. `EMAIL_FROM` admite formatos como `ELYON <pedidos@dominio.es>`.
+- `COMMERCE_MODE`: `preview`, `test` o `live`.
 
-**3. ✅ Diseño Profesional de Gimnasio:**
-- **Brillos reducidos:** Backdrop-filter optimizado (6-8px)
-- **Colores sobrios:** Paleta azul profesional discreta
-- **Tipografía atlética:** Oswald + Inter para look serio
-- **Glassmorphism sutil:** Efectos cristal profesionales
-- **Contenido especializado:** Textos específicos de fitness
+La cola de correo usa claves de idempotencia y reintenta hasta cinco veces. Si un envío queda pendiente, puede relanzarse desde **Lanzamiento**. El marcado de un pedido como enviado genera su confirmación de transporte.
 
-**4. ✅ JavaScript Completamente Funcional:**
-- DOM initialization robusto con error handling
-- Event listeners seguros y testados
-- Cart functionality con validación completa
-- Navigation con gestión de estado
-- Mobile menu 100% funcional
-- LocalStorage con manejo de errores
-- Performance optimizado
+## Verificación
 
-**5. ✅ CSS Profesional y Responsive:**
-- Modal overflow corregido
-- Button states mejorados
-- Loading screen fix aplicado
-- Responsive design perfecto
-- Safari compatibility añadida
-- Print styles incluidos
+Ejecuta `npm test`. La prueba construye el Worker y comprueba inventario, concurrencia, pagos, permisos, cuenta, privacidad, documentos y configuración de lanzamiento.
 
-**6. ✅ HTML Semántico y Accesible:**
-- ARIA labels completos
-- Skip links para navegación por teclado
-- Semantic HTML5 proper
-- Screen reader friendly
-- SEO optimizado
-- Meta tags completos
+## Despliegue en Cloudflare Workers
 
-## 📱 **Funcionalidades 100% Operativas:**
+Requiere Node.js 22.13 o superior y una cuenta Cloudflare que tenga la base D1 `elyon-db` (ID `2620c34d-9aa3-40de-bffb-c2470479350a`) y el bucket R2 `elyon-images`. Los bindings `DB`, `BUCKET`, `ASSETS` e `IMAGES` están declarados en `wrangler.toml` y Vite los lee directamente. No hacen falta herramientas de ChatGPT Sites.
 
-### ✅ **Navegación:**
-- ✅ Scroll suave entre secciones
-- ✅ Menú móvil responsive
-- ✅ Active link highlighting
-- ✅ Keyboard navigation
-- ✅ Skip links para accessibility
+1. Instala dependencias con `npm ci` y autentica Wrangler con `npx wrangler login` en tu propia cuenta.
+2. Prepara el esquema de la base D1 aplicando, en orden, los archivos SQL de `drizzle/` a la base remota. Comprueba el estado de las migraciones antes de activar la tienda. Este paso afecta a datos reales y no se ejecuta durante el build.
+3. Define los secretos de producción en Cloudflare, sin añadirlos al repositorio ni al ZIP. Por ejemplo, `npx wrangler secret put STRIPE_SECRET_KEY` y el mismo comando para las demás claves privadas. Las variables de configuración figuran en `.env.example`; valores como `COMMERCE_MODE=preview` deben permanecer cerrados hasta terminar la configuración de venta.
+4. Ejecuta `npm run build` y después `npx wrangler deploy` (o `npm run deploy`). El plugin de Cloudflare genera el Worker y una configuración de despliegue a partir de `wrangler.toml`. `npx wrangler deploy --dry-run` permite comprobar el paquete sin publicarlo.
 
-### ✅ **Carrito de Compras:**
-- ✅ Añadir productos con tallas/colores
-- ✅ Modificar cantidades
-- ✅ Eliminar productos
-- ✅ Persistencia con localStorage
-- ✅ Animaciones suaves
-- ✅ Modal profesional
+Si el bucket R2 todavía no existe en esa cuenta, créalo antes de publicar: `npx wrangler r2 bucket create elyon-images`. Asegúrate de tener configurados el dominio, Firebase, Stripe, el correo de confirmaciones y los documentos legales reales antes de cambiar a ventas en vivo. Los nombres de los bindings de Wrangler no guardan credenciales ni configuran por sí solos los servicios externos.
 
-### ✅ **Productos:**
-- ✅ Filtros por categorías
-- ✅ Animaciones de carga
-- ✅ Información completa
-- ✅ Selección de opciones
-- ✅ Responsive grid
+Para desarrollo local, `npm run dev` inicia Vite con bindings simulados por el plugin Cloudflare. `npm test` construye el Worker y ejecuta las pruebas existentes. `npm run db:generate` genera migraciones Drizzle cuando cambie el esquema.
 
-### ✅ **Formularios:**
-- ✅ Contacto con validación
-- ✅ Newsletter funcional
-- ✅ Error handling
-- ✅ Success feedback
-- ✅ Accessibility completa
+## Colección de mujer
 
-### ✅ **Interactividad:**
-- ✅ Botón "Volver arriba" funcional
-- ✅ Notificaciones profesionales
-- ✅ Loading screen suave
-- ✅ Hover effects optimizados
-- ✅ Touch-friendly en móvil
+CORE Racer Top y FLOW Square Top están disponibles en negro, blanco y gris. FORM Legging Largo y FORM Short (corte corto aprobado) se presentan en negro y gris. Los leggings llevan el símbolo delante y ELYON discreto centrado en la cintura trasera. Cada variante del catálogo dispone de una foto frontal y una trasera. Las imágenes y miniaturas están en `public/assets/products/`.
 
-## 📁 **Estructura del Proyecto:**
-
-```
-elyon_website_mejorada/
-├── index.html              # ✅ HTML semántico mejorado
-├── css/
-│   └── style.css           # ✅ CSS profesional corregido
-├── js/
-│   └── app.js              # ✅ JavaScript funcional 100%
-├── images/
-│   ├── logo.png            # ✅ Logo real optimizado (200x200)
-│   ├── logo-small.png      # ✅ Logo pequeño (100x100)
-│   ├── favicon-32x32.png   # ✅ Favicon estándar
-│   ├── favicon-16x16.png   # ✅ Favicon pequeño
-│   └── apple-touch-icon.png # ✅ Apple touch icon
-├── sw.js                   # ✅ Service Worker mejorado
-├── manifest.json           # ✅ Web App Manifest completo
-├── robots.txt              # ✅ SEO optimizado
-├── .htaccess              # ✅ Servidor configurado
-└── README.md              # ✅ Documentación completa
-```
-
-## 🚀 **Para Poner en Línea:**
-
-### **Hosting Tradicional (cPanel/FTP):**
-1. **Descomprimir** el ZIP en `public_html/`
-2. **Verificar** permisos de archivos (644 para archivos, 755 para carpetas)
-3. **Activar** .htaccess en el panel
-4. **Configurar** dominio y SSL
-5. **¡Listo!** - Toda la funcionalidad operativa
-
-### **Netlify/Vercel (Recomendado):**
-1. **Arrastrar** carpeta al dashboard
-2. **Deploy automático** con optimizaciones
-3. **SSL y CDN** incluidos
-4. **Dominio personalizado** fácil
-
-### **Servidor Local para Pruebas:**
-```bash
-# Opción 1: Python
-python -m http.server 8000
-
-# Opción 2: Node.js
-npx serve .
-
-# Opción 3: PHP
-php -S localhost:8000
-
-# Opción 4: Live Server (VSCode)
-# Instalar extensión Live Server
-```
-
-## 🎨 **Personalización Profesional:**
-
-### **Colores Principales:**
-```css
-:root {
-    --primary-blue: #3b82f6;      /* Azul principal profesional */
-    --secondary-blue: #60a5fa;    /* Azul secundario suave */
-    --dark-blue: #1e40af;         /* Azul oscuro para textos */
-    --glass-bg: rgba(255, 255, 255, 0.85); /* Cristal sutil */
-    --text-primary: #0f172a;      /* Texto principal */
-    --text-secondary: #64748b;    /* Texto secundario */
-}
-```
-
-### **Logo Optimizado:**
-- **Formato:** PNG con transparencia
-- **Tamaños:** 5 versiones (16px a 200px)
-- **Compresión:** Optimizada para web
-- **Uso:** Header, hero, footer, favicons
-
-## 📊 **Performance Mejorado:**
-
-- ✅ **Lighthouse Score:** 95+ en todas las métricas
-- ✅ **Loading Time:** < 1.5s en conexión normal
-- ✅ **Core Web Vitals:** Optimizado completamente
-- ✅ **Mobile Performance:** Excelente en todos los dispositivos
-- ✅ **SEO Score:** 100/100 con structured data
-- ✅ **Accessibility:** AA compliant
-- ✅ **PWA Ready:** Service worker incluido
-
-## 🔧 **Características Técnicas:**
-
-### **JavaScript Robusto:**
-- Error handling completo
-- Promise-based architecture
-- Event delegation
-- Performance optimized
-- Memory leak prevention
-- Cross-browser compatibility
-
-### **CSS Profesional:**
-- Mobile-first responsive
-- Flexbox + CSS Grid
-- Custom properties (variables)
-- Optimized animations
-- Print styles
-- Dark mode ready
-
-### **HTML Semántico:**
-- WAI-ARIA compliant
-- Screen reader optimized
-- Keyboard navigation
-- Skip links
-- Proper heading hierarchy
-- Structured data
-
-## 🏆 **Ideal Para:**
-- ✅ Tiendas de ropa deportiva profesional
-- ✅ Marcas de fitness premium
-- ✅ Gimnasios de alta gama
-- ✅ Atletas profesionales
-- ✅ Influencers fitness
-- ✅ Empresas del sector deportivo
-
-## 📞 **Soporte y Documentación:**
-
-### **Archivos Incluidos:**
-- ✅ HTML, CSS, JS completamente funcionales
-- ✅ Logo real optimizado en múltiples tamaños
-- ✅ Service Worker para PWA
-- ✅ Configuración de servidor (.htaccess)
-- ✅ Manifest para instalación
-- ✅ SEO completo (robots.txt, meta tags)
-
-### **Testing Realizado:**
-- ✅ Desktop (Chrome, Firefox, Safari, Edge)
-- ✅ Mobile (iOS Safari, Android Chrome)
-- ✅ Tablet (iPad, Android tablets)
-- ✅ Accessibility tools (NVDA, JAWS, VoiceOver)
-- ✅ Performance tools (Lighthouse, WebPageTest)
-
----
-
-## 🥇 **RESUMEN DE MEJORAS IMPLEMENTADAS:**
-
-### 🔧 **Fallos Completamente Corregidos:**
-1. ✅ **Scroll suave** - Función completamente reescrita y testada
-2. ✅ **Logo en título** - Integrado con imagen real optimizada  
-3. ✅ **Diseño profesional** - Brillos reducidos, colores sobrios
-4. ✅ **JavaScript funcional** - Error handling y robustez
-5. ✅ **CSS mejorado** - Modal, responsive, performance
-6. ✅ **HTML accesible** - Semántico y screen reader friendly
-
-### 💪 **Resultado Final:**
-- **🏋️ Diseño profesional** de gimnasio sin efectos excesivos
-- **✅ Funcionalidad completa** - Todo testado y operativo
-- **🚀 Performance excelente** - Optimizado para velocidad
-- **📱 Mobile perfect** - Responsive en todos los dispositivos  
-- **🔍 SEO optimizado** - Structured data y meta tags
-- **♿ Accessibility** - WCAG AA compliant
-
-**📦 Versión:** 3.1.0 Professional Corrected Edition  
-**📅 Fecha:** Septiembre 2025  
-**✅ Estado:** Production Ready - Todos los fallos corregidos
-
----
-
-**💪 ELYON - Diseñada por atletas profesionales, para atletas serios**  
-**🏆 Calidad premium, funcionalidad perfecta, performance optimizado**
+Las imágenes son propuestas generadas, no fotografías de prendas fabricadas. Los precios visibles se han fijado tras revisar referencias de ropa deportiva en España en septiembre de 2026: camisetas 24,95–34,95 €, pantalón corto de hombre 32,95 €, tops 26,95–29,95 €, legging largo 39,95 € y legging corto 29,95 €. Son precios publicados en el catálogo; hay que contrastar el margen con el coste real de fabricación, envíos, impuestos y devoluciones antes de abrir las ventas. Los productos siguen en vista previa y el stock inicial permanece a cero hasta validar la producción. El código actualiza el precio de los registros iniciales en vista previa sin alterar los importes personalizados ni productos activados. Las variantes blancas de leggings se retiran del catálogo; cualquier selección antigua puede eliminarse desde la bolsa.

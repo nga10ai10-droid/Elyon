@@ -1,0 +1,74 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import {Miniflare} from 'miniflare';
+import {readFile,readdir} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {generateKeyPairSync,sign} from 'node:crypto';
+
+// Firebase ID tokens signed with a local key; the Worker fetches this key set instead of Google's.
+const PROJECT='elyon-store-36627',JWK_URL='https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com';
+const {privateKey,publicKey}=generateKeyPairSync('rsa',{modulusLength:2048});
+const jwks={keys:[{...publicKey.export({format:'jwk'}),kid:'test-key',alg:'RS256',use:'sig'}]};
+const b64=value=>Buffer.from(typeof value==='string'?value:JSON.stringify(value)).toString('base64url');
+function idToken(uid,email=`${uid}@example.invalid`){const now=Math.floor(Date.now()/1000);const body=`${b64({alg:'RS256',kid:'test-key',typ:'JWT'})}.${b64({iss:`https://securetoken.google.com/${PROJECT}`,aud:PROJECT,sub:uid,user_id:uid,email,email_verified:true,iat:now,exp:now+3600,auth_time:now})}`;return `${body}.${sign('sha256',Buffer.from(body),privateKey).toString('base64url')}`}
+const auth=(uid,email)=>({authorization:`Bearer ${idToken(uid,email)}`});
+const outboundService=request=>request.url===JWK_URL?Response.json(jwks,{headers:{'Cache-Control':'max-age=3600'}}):new Response('Blocked in tests',{status:502});
+test('API: durable bag, ownership, invalid input, protected admin and closed checkout',async()=>{
+ const files=(await readdir('dist/server',{recursive:true})).filter(f=>f.endsWith('.js')).sort((a,b)=>a==='index.js'?-1:b==='index.js'?1:a.localeCompare(b));
+ const mf=new Miniflare({modules:files.map(path=>({type:'ESModule',path:resolve('dist/server',path)})),modulesRoot:resolve('dist/server'),compatibilityDate:'2026-05-15',compatibilityFlags:['nodejs_compat'],d1Databases:['DB'],r2Buckets:['BUCKET'],bindings:{COMMERCE_MODE:'preview',ADMIN_EMAIL:'owner@example.invalid'},serviceBindings:{ASSETS:()=>new Response('Not found',{status:404})},outboundService});
+ try{const db=await mf.getD1Database('DB');for(const f of (await readdir('drizzle')).filter(f=>f.endsWith('.sql')).sort()){const sql=await readFile('drizzle/'+f,'utf8');await db.batch(sql.split('--> statement-breakpoint').filter(s=>s.trim()).map(s=>db.prepare(s)))}
+ await db.prepare('UPDATE inventory SET stock=10').run();
+ const root='https://test.example';const post=(path,body,headers={})=>mf.dispatchFetch(root+path,{method:'POST',headers:{origin:root,'Content-Type':'application/json',...headers},body:JSON.stringify(body)});
+ assert.equal((await mf.dispatchFetch(root+'/api/admin')).status,401);
+ assert.equal((await mf.dispatchFetch(root+'/api/account')).status,401);
+ assert.equal((await post('/api/checkout',{})).status,401,'checkout requires an account');
+ assert.equal((await post('/api/checkout',{},auth('customer-one','one@example.invalid'))).status,503,'sales stay closed in preview');
+ assert.equal((await post('/api/contact',{name:'Test'})).status,400,'contact form is open and validates input');
+ assert.equal((await post('/api/cart',{id:'core-tee',color:'magenta',size:'M',quantity:1})).status,400);
+ assert.equal((await post('/api/cart',{id:'core-tee',color:'negro',size:'M',quantity:100})).status,400);
+ assert.equal((await post('/api/cart',{}, {origin:'https://untrusted.example'})).status,403);
+ const womenCatalog=await (await mf.dispatchFetch(root+'/api/catalog')).json();
+ const womenIds=['core-racer-top','flow-square-top','form-high-waist-legging','form-biker-short'];
+ assert.equal(womenCatalog.products.filter(p=>womenIds.includes(p.id)).flatMap(p=>p.colors).length,10);
+ assert.equal((await post('/api/cart',{id:'form-biker-short',color:'blanco',size:'S',quantity:1},auth('women-customer'))).status,400);
+ const womenBag=await post('/api/cart',{id:'flow-square-top',color:'blanco',size:'S',quantity:1},auth('women-customer'));
+ assert.equal(womenBag.status,200,await womenBag.clone().text());const womenData=await womenBag.json();assert.equal(womenData.items[0].color,'blanco');assert.equal(womenData.items[0].product.category,'Tops');
+ let res=await post('/api/cart',{id:'core-tee',color:'gris',size:'M',quantity:2},auth('customer-one','one@example.invalid'));assert.equal(res.status,200,await res.clone().text());const cookie=res.headers.get('set-cookie');assert.match(cookie,/HttpOnly/);assert.match(cookie,/Secure/);assert.match(cookie,/SameSite=Lax/);const bagCookie=cookie.split(';')[0];
+ const get=(id,c=bagCookie)=>mf.dispatchFetch(root+'/api/cart',{headers:{cookie:c,...auth(id)}});
+ let data=await (await get('customer-one')).json();assert.equal(data.items.length,1);assert.equal(data.items[0].quantity,2);assert.equal(data.items[0].color,'gris');assert.equal(data.items[0].size,'M');
+ data=await (await get('customer-two')).json();assert.equal(data.items.length,0);
+ data=await (await get('customer-one','')).json();assert.equal(data.items.length,1,'same signed-in user can restore bag without cookie');
+ res=await mf.dispatchFetch(root+'/api/checkout/status?session_id=cs_test_unknown');assert.equal(res.status,404);
+ const admin=auth('owner-id','owner@example.invalid'),one=auth('customer-one','one@example.invalid'),two=auth('customer-two');
+ res=await mf.dispatchFetch(root+'/api/admin',{headers:admin});assert.equal(res.status,200);data=await res.json();assert.equal(data.products.length,9);assert.equal(data.launchChecklist.length,5);assert.ok(!data.launchChecklist.some(c=>c.id==='business'||c.id==='legal'));assert.equal(data.config.emailReady,false);
+ data=await (await post('/api/admin',{action:'process-email'},admin)).json();assert.equal(data.configured,false);
+ assert.equal((await post('/api/auth/request',{email:'new@example.invalid'})).status,503,'email registration remains closed');
+ assert.equal((await post('/api/auth/request',{}, {origin:'https://untrusted.example'})).status,403);
+ assert.equal((await post('/api/account',{action:'profile',name:'Invasor',user_id:'customer-two'},one)).status,400);
+ assert.equal((await post('/api/account',{action:'profile',name:'Mi perfil'},one)).status,200);
+ const addr={name:'Persona Uno',street:'Calle de Prueba 10',city:'Málaga',postcode:'29001',country:'ES'};
+ assert.equal((await post('/api/account',addr,one)).status,200);
+ assert.equal((await post('/api/account',{action:'delete-address'},one)).status,400);
+ assert.equal((await post('/api/account',{action:'delete-address',confirmed:true},two)).status,200);
+ let account=await (await mf.dispatchFetch(root+'/api/account',{headers:one})).json();assert.equal(account.address.name,'Persona Uno');assert.equal(account.profile.name,'Mi perfil');
+ assert.equal((await mf.dispatchFetch(root+'/api/account/export')).status,401);
+ let exported=await mf.dispatchFetch(root+'/api/account/export',{headers:one});assert.equal(exported.status,200);assert.equal(exported.headers.get('cache-control'),'no-store');assert.match(exported.headers.get('content-disposition'),/attachment/);data=await exported.json();assert.equal(data.profile[0].name,'Mi perfil');assert.equal(data.bags.length,1);
+ data=await (await mf.dispatchFetch(root+'/api/account/export',{headers:two})).json();assert.equal(data.profile.length,0);assert.equal(data.address.length,0);assert.equal(data.bags.length,0);
+ assert.equal((await post('/api/account',{action:'privacy-request'},one)).status,400);
+ const request1=await (await post('/api/account',{action:'privacy-request',confirmed:true},one)).json();const request2=await (await post('/api/account',{action:'privacy-request',confirmed:true},one)).json();assert.equal(request1.request.id,request2.request.id,'retries do not duplicate requests');
+ assert.equal((await mf.dispatchFetch(root+'/api/admin/privacy',{headers:one})).status,403);
+ data=await (await mf.dispatchFetch(root+'/api/admin/privacy',{headers:admin})).json();assert.equal(data.requests.length,1);assert.equal(data.requests[0].user_id,'customer-one');
+ assert.equal((await post('/api/account',{action:'delete-address',confirmed:true},one)).status,200);
+ account=await (await mf.dispatchFetch(root+'/api/account',{headers:one})).json();assert.equal(account.address,null);assert.equal(account.profile.name,'Mi perfil');
+ data=await (await mf.dispatchFetch(root+'/api/admin',{headers:admin})).json();assert.equal(data.legal,undefined);assert.equal(data.launchSettings,undefined);
+ const aviso=await (await mf.dispatchFetch(root+'/legal/aviso-legal')).text();assert.match(aviso,/Aitor Guillén Narbona/);assert.match(aviso,/Estanco Royal/);assert.doesNotMatch(aviso,/\[\[[A-Z_]+\]\]/);assert.doesNotMatch(aviso,/se publicará cuando/);
+ assert.match(await (await mf.dispatchFetch(root+'/legal/condiciones')).text(),/69,99 €/);
+ assert.match(data.launchChecklist.find(c=>c.id==='payments').detail,/clave de Stripe/);
+ assert.deepEqual({key:data.payments.stripeKey,webhook:data.payments.webhook,open:data.payments.open},{key:null,webhook:false,open:false});
+ assert.equal((await post('/api/admin',{action:'sales',open:true},one)).status,403,'only the admin can open sales');
+ res=await post('/api/admin',{action:'sales',open:true},admin);assert.equal(res.status,400);assert.match((await res.json()).error,/clave de Stripe/);
+ assert.equal((await post('/api/admin',{action:'sales',open:false},admin)).status,200);
+ assert.equal((await mf.dispatchFetch(root+'/legal/__proto__')).status,404);
+ assert.equal((await mf.dispatchFetch(root+'/legal/desistimiento')).status,200);
+ }finally{await mf.dispose()}
+});

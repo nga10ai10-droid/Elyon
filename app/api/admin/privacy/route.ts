@@ -1,0 +1,2 @@
+import {database,requireAdmin,responseError} from '@/lib/commerce';
+export async function GET(){try{await requireAdmin();const {results}=await database().prepare('SELECT r.id,r.user_id,r.status,r.created,p.name FROM privacy_requests r LEFT JOIN member_profiles p ON p.user_id=r.user_id ORDER BY r.created ASC LIMIT 100').all();return Response.json({requests:results},{headers:{'Cache-Control':'no-store'}})}catch(e){return responseError(e)}}
