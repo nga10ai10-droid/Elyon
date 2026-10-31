@@ -13,7 +13,8 @@
     "deploy": "wrangler deploy",
     "test": "npm run build && node --test tests/*.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "postinstall": "node -e \"if(process.env.WORKERS_CI){require('child_process').execSync('npm run build',{stdio:'inherit'})}\""
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
