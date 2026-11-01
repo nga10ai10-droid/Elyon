@@ -182,3 +182,55 @@
 .admin-badge{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;border:1px solid currentColor;padding:2px 8px;margin-left:8px;vertical-align:middle;font-weight:500}
 .admin-badge.s-paid{color:#b26a00}.admin-badge.s-shipped{color:#1f6fb2}.admin-badge.s-delivered{color:#2e7d32}.admin-badge.s-returned,.admin-badge.s-canceled,.admin-badge.s-expired{color:#888}
 .admin-actions{display:flex;gap:14px;align-items:center;margin-top:10px}
+
+/* ===== Galería deslizable y acabado profesional (nov 2026) ===== */
+.gallery-frame{position:relative;background:var(--paper);overflow:hidden}
+.gallery-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.gallery-track::-webkit-scrollbar,.zoom-track::-webkit-scrollbar,.card-track::-webkit-scrollbar,.category-pills::-webkit-scrollbar{display:none}
+.gallery-track .main-photo{flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always}
+.gallery-track .main-photo img{user-select:none;-webkit-user-drag:none}
+.gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;display:grid;place-items:center;border:0;border-radius:50%;background:#ffffffe6;color:#111;box-shadow:0 2px 12px #0000001a;opacity:0;transition:opacity .25s,background .2s;z-index:2;cursor:pointer}
+.gallery-arrow.prev{left:16px}.gallery-arrow.next{right:16px}
+.gallery-frame:hover .gallery-arrow,.gallery-arrow:focus-visible{opacity:1}
+.gallery-arrow:hover{background:#fff}
+.zoom-hint{position:absolute;right:16px;bottom:16px;width:38px;height:38px;display:grid;place-items:center;border-radius:50%;background:#ffffffd9;pointer-events:none}
+.gallery-dots{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;gap:7px;pointer-events:none}
+.gallery-dots span{width:7px;height:7px;border-radius:50%;background:#11111140;transition:width .25s,background .25s}
+.gallery-dots span.active{width:22px;border-radius:4px;background:#111}
+.gallery-count{position:absolute;left:16px;bottom:14px;font-size:10px;letter-spacing:.08em;color:var(--muted);pointer-events:none}
+.thumbnails{margin-top:12px}
+.thumbnails button{transition:border-color .2s,opacity .2s;opacity:.6;cursor:pointer}
+.thumbnails [aria-pressed=true],.thumbnails button:hover{opacity:1}
+.zoom-track{flex:1;min-height:0;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.zoom-track img{flex:0 0 100%;height:100%;width:100%;object-fit:contain;scroll-snap-align:center;scroll-snap-stop:always;user-select:none}
+.trust-row{list-style:none;padding:0;margin:22px 0 0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;border-top:1px solid var(--line);padding-top:20px}
+.trust-row li{display:flex;gap:9px;align-items:flex-start;font-size:11px;font-weight:600;line-height:1.35}
+.trust-row svg{flex:none;margin-top:1px}
+.trust-row small{display:block;font-weight:400;color:var(--muted);font-size:10px;margin-top:3px}
+.add-button{transition:background .2s,transform .1s}.add-button:active{transform:scale(.99)}
+/* Tarjetas: frontal/espalda deslizable en táctil */
+.card-track{width:100%;height:100%}
+.card-dots{display:none}
+@media(hover:none){
+ .card-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+ .card-track img{flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always}
+ .product-image .card-track .image-back{position:static;opacity:1}
+ .card-dots{display:flex;gap:5px;position:absolute;left:50%;bottom:10px;transform:translateX(-50%);pointer-events:none}
+ .card-dots i{width:5px;height:5px;border-radius:50%;background:#11111140;transition:width .25s,background .25s}
+ .card-dots i.active{width:14px;border-radius:3px;background:#111}
+ .gallery-arrow{display:none}
+}
+/* Categorías de la tienda: fila deslizable, sin ensanchar la página */
+.category-pills{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;overscroll-behavior-x:contain;scroll-padding-inline:var(--gutter)}
+.category-pills button{flex:none;white-space:nowrap;transition:background .2s,color .2s,border-color .2s;cursor:pointer}
+.category-pills button:hover{border-color:#111}
+html,body{overflow-x:clip}
+@media(max-width:600px){
+ .hero h1{font-size:17.5vw;letter-spacing:-.06em}
+ .thumbnails{display:none}
+ .gallery-track .main-photo img{max-height:none;height:auto;aspect-ratio:3/4;object-fit:contain}
+ .zoom-hint{width:34px;height:34px;right:12px;bottom:12px}
+ .gallery-count{display:none}
+ .trust-row{grid-template-columns:1fr;gap:14px}
+ .zoom-dialog{width:100vw!important;max-width:100vw!important;height:100svh;border-radius:0!important;padding:56px 0 10px!important}
+}
