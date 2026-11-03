@@ -68,6 +68,32 @@ export function shopMetadata(gender:string,category:string):Metadata{
   return pageMetadata({title,description,path:shopPath(gender,category)});
 }
 
+
+/* ---------- Envío y devoluciones (condiciones de /help) ---------- */
+export function shippingDetailsJsonLd(){
+  return {
+    '@type':'OfferShippingDetails',
+    shippingRate:{'@type':'MonetaryAmount',value:'7.00',currency:'EUR'},
+    shippingDestination:{'@type':'DefinedRegion',addressCountry:'ES'},
+    deliveryTime:{
+      '@type':'ShippingDeliveryTime',
+      handlingTime:{'@type':'QuantitativeValue',minValue:1,maxValue:2,unitCode:'DAY'},
+      transitTime:{'@type':'QuantitativeValue',minValue:1,maxValue:3,unitCode:'DAY'},
+    },
+  };
+}
+export function returnPolicyJsonLd(){
+  return {
+    '@type':'MerchantReturnPolicy',
+    applicableCountry:'ES',
+    returnPolicyCategory:'https://schema.org/MerchantReturnFiniteReturnWindow',
+    merchantReturnDays:14,
+    returnMethod:'https://schema.org/ReturnByMail',
+    returnFees:'https://schema.org/ReturnShippingFees',
+    merchantReturnLink:absoluteUrl('/help#devoluciones'),
+  };
+}
+
 /* ---------- Product pages ---------- */
 export function productPath(p:Product){return `/product/${p.id}`}
 export function productTitle(p:Product){
@@ -102,6 +128,8 @@ export function productJsonLd(p:Product,sellable:boolean){
       // Honest availability: only "InStock" once the shop is live and the garment is on sale.
       availability:sellable?'https://schema.org/InStock':'https://schema.org/OutOfStock',
       seller:{'@type':'Organization',name:BRAND},
+      shippingDetails:shippingDetailsJsonLd(),
+      hasMerchantReturnPolicy:returnPolicyJsonLd(),
     },
   };
 }
@@ -131,6 +159,7 @@ export function organizationJsonLd(){
     description:SITE_DESCRIPTION,
     slogan:'Evoluciona. Supérate.',
     areaServed:'ES',
+    hasMerchantReturnPolicy:returnPolicyJsonLd(),
     ...(/^https:\/\//.test(instagram)?{sameAs:[instagram]}:{}),
     ...(email.includes('@')?{contactPoint:{'@type':'ContactPoint',contactType:'customer support',email,availableLanguage:['es']}}:{}),
   };
