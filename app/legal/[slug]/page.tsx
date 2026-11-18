@@ -2,7 +2,7 @@ import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {isLegalSlug,legalPages,legalSections,LEGAL_UPDATED} from '@/lib/legal';
 import {PrintButton} from '@/components/print-button';
-export const metadata={title:'Información legal',robots:{index:false,follow:true}};
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}){const{slug}=await params;return {title:isLegalSlug(slug)?legalPages[slug].title:'Información legal',robots:{index:false,follow:true}}}
 export default async function Legal({params}:{params:Promise<{slug:string}>}){
   const{slug}=await params;if(!isLegalSlug(slug))notFound();
   const doc=legalPages[slug];const sections=legalSections(doc.body);
