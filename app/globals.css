@@ -237,3 +237,24 @@ html,body{overflow-x:clip}
 }
 .order-steps{display:flex;gap:6px;list-style:none;padding:0;margin:14px 0 10px}.order-steps li{flex:1;font-size:12px;letter-spacing:.04em;padding-top:8px;border-top:3px solid var(--line);color:var(--muted)}.order-steps li[data-done="true"]{border-color:#090909;color:#090909;font-weight:650}
 .order-lines{list-style:none;padding:0;margin:10px 0;font-size:14px}.order-lines li{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid var(--line)}.order-address{font-size:13px;color:var(--muted);margin:8px 0 0}
+.account-dashboard .acc-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;padding-bottom:28px;border-bottom:1px solid var(--line)}
+.account-dashboard .acc-head h1{font-size:clamp(34px,5vw,56px);line-height:1;margin:0 0 10px;letter-spacing:-.02em;text-wrap:balance}
+.account-dashboard .acc-head p{margin:0;color:var(--muted);font-size:14px;overflow-wrap:anywhere}
+.acc-head-actions{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.account-dashboard>[data-slot=tabs]{margin:28px 0 0}
+.acc-orders{list-style:none;margin:0;padding:8px 0 0;max-width:860px}
+.acc-orders>li{border-bottom:1px solid var(--line)}
+.acc-orders summary{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:20px;padding:22px 0;cursor:pointer;list-style:none;min-height:44px}
+.acc-orders summary::-webkit-details-marker{display:none}
+.acc-orders summary:focus-visible{outline:2px solid #090909;outline-offset:4px}
+.acc-ref{display:grid;gap:4px}.acc-ref strong{font-size:15px;letter-spacing:.02em}.acc-ref small{font-size:12px;color:var(--muted)}
+.acc-status{font-size:12px;font-weight:650;padding:6px 12px;border:1px solid #090909;border-radius:999px;white-space:nowrap}
+.acc-status[data-status=pending],.acc-status[data-status=canceled],.acc-status[data-status=returned],.acc-status[data-status=refunded]{border-color:var(--line);color:var(--muted)}
+.acc-status[data-status=delivered]{background:#090909;color:#fff}
+.acc-total{font-size:15px;font-weight:650;font-variant-numeric:tabular-nums;min-width:72px;text-align:right}
+.acc-body{padding:0 0 26px;display:grid;gap:4px}
+.acc-body .order-steps{margin:4px 0 14px}.acc-tracking{font-size:14px;margin:0 0 6px}
+.acc-body .order-lines{margin:0;font-variant-numeric:tabular-nums}
+.acc-body .order-lines .order-total{font-weight:700;border-bottom:0;padding-top:14px}
+.acc-body .order-address{font-size:13px;color:var(--muted);margin:12px 0 0;max-width:60ch}
+@media(max-width:600px){.acc-orders summary{grid-template-columns:1fr auto;gap:10px 14px}.acc-orders .acc-total{grid-column:2;grid-row:1;min-width:0}.acc-orders .acc-status{grid-column:1;grid-row:2;justify-self:start}.account-dashboard .acc-head{padding-bottom:22px}}
