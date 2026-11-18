@@ -3,13 +3,15 @@ import {database,HttpError,requireUser,readBody,responseError,sameOrigin,rateLim
 const address=z.object({name:z.string().trim().min(2).max(100),street:z.string().trim().min(5).max(150),city:z.string().trim().min(2).max(80),postcode:z.string().regex(/^\d{5}$/),country:z.literal('ES')}).strict();
 export async function GET(){try{
   const u=await requireUser();const db=database();
-  const [orders,a,profile,privacy]=await Promise.all([
-    db.prepare('SELECT id,status,total,tracking,created FROM orders WHERE user_id=? ORDER BY created DESC LIMIT 50').bind(u.id).all(),
+  const [orders,lines,a,profile,privacy]=await Promise.all([
+    db.prepare('SELECT id,status,total,shipping,tracking,created,address FROM orders WHERE user_id=? ORDER BY created DESC LIMIT 50').bind(u.id).all(),
+    db.prepare('SELECT order_id,name,quantity,unit_price FROM order_lines WHERE order_id IN (SELECT id FROM orders WHERE user_id=?) ORDER BY rowid').bind(u.id).all<{order_id:string;name:string;quantity:number;unit_price:number}>(),
     db.prepare('SELECT data FROM addresses WHERE user_id=?').bind(u.id).first<{data:string}>(),
     db.prepare('SELECT name,created,updated FROM member_profiles WHERE user_id=?').bind(u.id).first(),
     db.prepare('SELECT id,status,created FROM privacy_requests WHERE user_id=?').bind(u.id).first()
   ]);
-  return Response.json({user:u,orders:orders.results,address:a?JSON.parse(a.data):null,profile,privacy},{headers:{'Cache-Control':'no-store'}})
+  const orderList=(orders.results as {id:string}[]).map(o=>({...o,lines:lines.results.filter(l=>l.order_id===o.id).map(({name,quantity,unit_price})=>({name,quantity,unit_price}))}));
+  return Response.json({user:u,orders:orderList,address:a?JSON.parse(a.data):null,profile,privacy},{headers:{'Cache-Control':'no-store'}})
 }catch(e){return responseError(e)}}
 export async function POST(request:Request){try{
   sameOrigin(request);const u=await requireUser();
