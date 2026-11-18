@@ -54,7 +54,8 @@ export function ProductsManager({products,inventory,reload}:{products:Product[];
   function updateColor(n:number,patch:Partial<Colorway>){setDraft(d=>{if(!d)return d;const colors=d.colors.map((c,i)=>{if(i!==n)return c;const next={...c,...patch};if(patch.name!==undefined&&!lockedCodes.includes(c.code)){const base=slug(patch.name).slice(0,26)||`color-${n+1}`;let code=base,k=2;while(d.colors.some((o,j)=>j!==n&&o.code===code))code=`${base}-${k++}`;next.code=code}return next});return {...d,colors}})}
 
   if(!draft)return <div className="pm">
-    <div className="pm-head"><div><h2>Prendas</h2><p>{counts.all} prendas, {counts.active} a la venta y {totalUnits} unidades en stock.</p></div><button type="button" className="btn dark" onClick={create}>Nueva prenda</button></div>
+    <div className="pm-head"><div><h2>Prendas</h2><p>{counts.all} prendas, {counts.active} a la venta y {totalUnits} unidades en stock.</p></div><div className="pm-actions"><button type="button" className="btn" disabled={busy} onClick={importCatalog}>Importar prendas nuevas</button><button type="button" className="btn dark" onClick={create}>Nueva prenda</button></div></div>
+    {status&&<p role="status" className="form-message">{status}</p>}
     <div className="pm-filters" role="group" aria-label="Filtrar prendas">{(['all','active','preview','hidden'] as Filter[]).map(f=><button type="button" key={f} aria-pressed={filter===f} onClick={()=>setFilter(f)}>{FILTER_LABEL[f]}<span>{counts[f]}</span></button>)}</div>
     <ul className="pm-list">{products.filter(p=>filter==='all'||p.status===filter).map(p=>{const units=unitsOf(p,inventory);const cover=p.colors[0]?.images[0];return <li key={p.id}><button type="button" className="pm-row" onClick={()=>open(p)}>
       <span className="pm-thumb">{cover?<img src={cover} alt="" width={56} height={72} loading="lazy"/>:null}</span>
@@ -75,14 +76,19 @@ export function ProductsManager({products,inventory,reload}:{products:Product[];
 
   async function upload(n:number,files:File[]){if(!files.length)return;setBusy(true);let added=0;try{const token=await getFirebaseToken();const room=6-(draft?.colors[n].images.length??6);for(const file of files.slice(0,Math.max(0,room))){const form=new FormData();form.set('file',file);const res=await fetch('/api/admin/upload',{method:'POST',body:form,credentials:'same-origin',headers:token?{Authorization:`Bearer ${token}`}:{}});const d=await res.json().catch(()=>({}));if(!res.ok)throw new Error(d.error||'No se pudo subir la foto.');setDraft(cur=>cur?{...cur,colors:cur.colors.map((c,j)=>j===n?{...c,images:[...c.images,d.url].slice(0,6)}:c)}:cur);added++}setStatus(added?`${added===1?'Foto subida':`${added} fotos subidas`}. Guarda los cambios para publicarla${added===1?'':'s'}.`:'Este color ya tiene 6 fotos.')}catch(e){setStatus((e as Error).message)}finally{setBusy(false)}}
   async function save(e:FormEvent){e.preventDefault();if(invalid)return;setBusy(true);setStatus('Guardando…');
-    const clean:Product={...p,name:p.name.trim(),description:p.description.trim(),fit:p.fit.trim(),composition:p.composition.trim(),care:p.care.trim(),measurements:p.measurements.trim(),sizes:sizes.filter(s=>p.sizes.includes(s)),colors:p.colors.map(c=>({...c,name:c.name.trim()}))};
+    const clean:Product={...p,name:p.name.trim(),description:p.description.trim()||'Descripción pendiente de redactar.',fit:p.fit.trim()||'Ajuste pendiente de validar.',composition:p.composition.trim()||'Composición y gramaje pendientes de validar con la muestra de fabricación.',care:p.care.trim()||'Las instrucciones definitivas de lavado se publicarán con la etiqueta de composición.',measurements:p.measurements.trim()||'Guía de medidas pendiente de verificar sobre la prenda fabricada.',sizes:sizes.filter(s=>p.sizes.includes(s)),colors:p.colors.map(c=>({...c,name:c.name.trim()}))};
+    let productSaved=false;
     try{
-      await api('/api/admin',{action:'product',product:clean,confirmed:clean.status==='active'&&(confirmed||savedStatus==='active')});
+      await api('/api/admin',{action:'product',product:clean,isNew,confirmed:clean.status==='active'&&(confirmed||savedStatus==='active')});
+      productSaved=true;setIsNew(false);
       const items=clean.colors.flatMap(c=>clean.sizes.map(size=>{const sku=variantId(clean.id,c.code,size);return {sku,stock:Math.max(0,Math.floor(stock[sku]||0)),expected:inventory.find(i=>i.sku===sku)?.stock??0}})).filter(i=>i.stock!==i.expected);
       if(items.length)await api('/api/admin',{action:'stock',items});
       await reload();
       setDraft(clean);setBaseline(snapshot(clean,stock));setIsNew(false);setIdTouched(true);setLockedCodes(clean.colors.map(c=>c.code));setConfirmed(false);setStatus('✓ Cambios guardados');
-    }catch(err){setStatus((err as Error).message)}finally{setBusy(false)}}
+    }catch(err){
+      if(productSaved){try{await reload()}catch{}setStatus(`La prenda se guardó, pero las existencias no: ${(err as Error).message}`)}else setStatus((err as Error).message)
+    }finally{setBusy(false)}}
+  async function importCatalog(){setBusy(true);setStatus('Importando…');try{await api('/api/admin',{action:'initialize'});await reload();setStatus('Catálogo importado: se han añadido las prendas que faltaban, sin tocar las existentes.')}catch(e){setStatus((e as Error).message)}finally{setBusy(false)}}
 
   return <div className="pe">
     <div className="pe-top"><button type="button" className="pe-back" onClick={back}>← Prendas</button>{!isNew&&<a className="pe-link" href={`/product/${p.id}`} target="_blank" rel="noreferrer">Ver en la tienda</a>}</div>
