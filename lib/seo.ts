@@ -9,9 +9,10 @@ export const SITE_DESCRIPTION='ELYON es una marca española de ropa deportiva y 
 export const OG_IMAGE={url:'/og-image.jpg',width:1200,height:630,alt:'ELYON — ropa deportiva y streetwear'};
 
 export const GENDERS=['Hombre','Mujer'] as const;
-export const CATEGORIES=['Camisetas','Tops','Leggings','Shorts','Pantalones'] as const;
+export const CATEGORIES=['Camisetas','Sudaderas','Tops','Leggings','Shorts','Pantalones'] as const;
 const CATEGORY_LABEL:Record<string,{plural:string;singular:string}>={
   Camisetas:{plural:'Camisetas deportivas',singular:'Camiseta deportiva'},
+  Sudaderas:{plural:'Sudaderas deportivas',singular:'Sudadera deportiva'},
   Tops:{plural:'Tops deportivos',singular:'Top deportivo'},
   Leggings:{plural:'Leggings',singular:'Leggings'},
   Shorts:{plural:'Leggings cortos y shorts',singular:'Short deportivo'},

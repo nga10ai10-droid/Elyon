@@ -2,6 +2,7 @@ import type {Product} from './products';
 
 const searchNames:Record<Product['category'],string>={
   Camisetas:'camiseta camisetas tee t shirt',
+  Sudaderas:'sudadera sudaderas hoodie capucha sweatshirt',
   Pantalones:'pantalón pantalon pantalones bermuda bermudas',
   Tops:'top tops',
   Leggings:'legging leggings leggin leggins malla mallas',

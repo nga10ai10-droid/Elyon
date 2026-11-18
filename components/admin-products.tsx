@@ -9,7 +9,7 @@ type Status=Product['status'];
 type Filter='all'|Status;
 
 const STANDARD_SIZES=['XS','S','M','L','XL','XXL'];
-const CATEGORIES:Category[]=['Camisetas','Pantalones','Tops','Leggings','Shorts'];
+const CATEGORIES:Category[]=['Camisetas','Sudaderas','Pantalones','Tops','Leggings','Shorts'];
 const GENDERS:Gender[]=['Hombre','Mujer'];
 const STATUS:Record<Status,{label:string;hint:string}>={
   preview:{label:'Vista previa',hint:'Se ve en la tienda, pero no se puede comprar.'},
