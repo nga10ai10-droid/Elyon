@@ -5,7 +5,7 @@ import type {Product} from './products';
 
 export const BRAND='ELYON';
 export const DEFAULT_ORIGIN='https://www.elyonwear.com';
-export const SITE_DESCRIPTION='ELYON es una marca española de ropa deportiva y streetwear. Camisetas oversized, athletic y performance, leggings, tops y shorts. Descubre First Drop.';
+export const SITE_DESCRIPTION='ELYON es una marca española de ropa deportiva y streetwear. Camisetas oversized, athletic y performance, leggings, tops y shorts. Descubre la primera colección.';
 export const OG_IMAGE={url:'/og-image.jpg',width:1200,height:630,alt:'ELYON — ropa deportiva y streetwear'};
 
 export const GENDERS=['Hombre','Mujer'] as const;
@@ -62,10 +62,10 @@ export function shopPath(gender:string,category:string){
 }
 export function shopMetadata(gender:string,category:string):Metadata{
   const cat=category?CATEGORY_LABEL[category]?.plural||category:'';
-  const title=cat&&gender?`${cat} ${genderSuffix(gender)}`:cat?cat:gender?`Ropa deportiva ${genderSuffix(gender)}`:'Tienda de ropa deportiva — First Drop';
+  const title=cat&&gender?`${cat} ${genderSuffix(gender)}`:cat?cat:gender?`Ropa deportiva ${genderSuffix(gender)}`:'Tienda de ropa deportiva — Primera colección';
   const description=cat||gender
-    ?clip(`${title} ELYON: diseño minimalista, cortes pensados para entrenar y para el día a día. Colección First Drop en negro, blanco y gris.`)
-    :'Compra la colección First Drop de ELYON: camisetas oversized, athletic y performance, tops, leggings y shorts. Ropa deportiva española con diseño minimalista.';
+    ?clip(`${title} ELYON: diseño minimalista, cortes pensados para entrenar y para el día a día. Primera colección en negro, blanco y gris.`)
+    :'Compra la primera colección de ELYON: camisetas oversized, athletic y performance, tops, leggings y shorts. Ropa deportiva española con diseño minimalista.';
   return pageMetadata({title,description,path:shopPath(gender,category)});
 }
 
