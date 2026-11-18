@@ -3,11 +3,16 @@ import {database,setting} from './commerce';
 import {brandedEmail} from './email-brand';
 
 type QueueRow={id:string;order_id:string;kind:string;attempts:number};
-type OrderRow={id:string;email:string|null;total:number;status:string;tracking:string|null};
+type OrderRow={id:string;email:string|null;total:number;shipping:number|null;address:string|null;status:string;tracking:string|null};
 type LineRow={name:string;quantity:number;unit_price:number};
 
 const escapeHtml=(value:string)=>value.replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]!));
 const euros=(cents:number)=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR'}).format(cents/100);
+const siteUrl=()=>setting('SITE_ORIGIN').trim().replace(/[/]+$/,'');
+const accountUrl=()=>`${siteUrl()}/account`;
+const DELIVERY='Preparamos tu pedido en 1–2 días laborables y GLS lo entrega en 1–3 días.';
+function addressLines(raw:string|null){try{const a=JSON.parse(raw||'null') as {name?:string;address?:{line1?:string;line2?:string;postal_code?:string;city?:string;state?:string}}|null;if(!a)return [];const d=a.address||{};return [a.name,d.line1,d.line2,[d.postal_code,d.city].filter(Boolean).join(' '),d.state].filter((x):x is string=>!!x&&!!x.trim())}catch{return []}}
+const label=(text:string)=>`<p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#737373">${text}</p>`;
 const logoUrl=()=>setting('EMAIL_LOGO_URL').trim()||`${setting('SITE_ORIGIN').replace(/\/$/,'')}/assets/logo.png`;
 
 export function emailConfigured(){return Boolean(setting('RESEND_API_KEY').trim()&&setting('EMAIL_FROM').includes('@'))}
@@ -22,10 +27,11 @@ function message(order:OrderRow,lines:LineRow[],kind:string){
  if(kind==='shipping_confirmation'){
   const tracking=order.tracking?.trim()||'Consulta el seguimiento respondiendo a este correo.';
   const details=`<p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#737373">PEDIDO</p><p style="margin:0 0 20px;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:700;color:#111111">${safeId}</p><p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#737373">SEGUIMIENTO</p><p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#111111">${escapeHtml(tracking)}</p>`;
-  return {subject:`Tu pedido ELYON ${order.id.slice(0,8)} está en camino`,text:`Tu pedido ${order.id} ha sido enviado. Seguimiento: ${tracking}`,html:brandedEmail({preheader:'Tu pedido ELYON ya está en camino.',eyebrow:'Actualización de envío',title:'Tu pedido está en camino.',intro:'Ya hemos preparado tu pedido y ha salido de nuestro almacén.',contentHtml:details,footer:'¿Necesitas ayuda? Responde a este correo y nuestro equipo te atenderá.',logoUrl:logoUrl()})};
+  return {subject:`Tu pedido ELYON ${order.id.slice(0,8)} está en camino`,text:`Tu pedido ${order.id} ha sido enviado. Seguimiento: ${tracking}. Consulta tu pedido en ${accountUrl()}`,html:brandedEmail({preheader:'Tu pedido ELYON ya está en camino.',eyebrow:'Actualización de envío',title:'Tu pedido está en camino.',intro:'Ya hemos preparado tu pedido y ha salido de nuestro almacén.',contentHtml:details,action:{label:'Ver mi pedido',url:accountUrl()},footer:`${DELIVERY} ¿Necesitas ayuda? Responde a este correo y nuestro equipo te atenderá.`,logoUrl:logoUrl()})};
  }
- const details=`<p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#737373">PEDIDO ${safeId}</p><table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">${rows}<tr><td style="padding:18px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:700;color:#111111">TOTAL</td><td align="right" style="padding:18px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:18px;font-weight:700;color:#111111">${euros(order.total)}</td></tr></table>`;
- return {subject:`Pedido confirmado · ELYON ${order.id.slice(0,8)}`,text:`Hemos recibido el pago del pedido ${order.id}. Total: ${euros(order.total)}.`,html:brandedEmail({preheader:'Tu pedido ELYON está confirmado.',eyebrow:'Confirmación de pedido',title:'Gracias por elegir ELYON.',intro:'Hemos recibido correctamente tu pago. Te avisaremos en cuanto el pedido salga de nuestro almacén.',contentHtml:details,footer:'Conserva este correo como confirmación de tu compra.',logoUrl:logoUrl()})};
+ const shipping=order.shipping??0;const cell='padding:10px 0;border-bottom:1px solid #ececea;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#333333';const extra=`<tr><td style="${cell}">Envío GLS</td><td align="right" style="${cell}">${shipping===0?'Gratis':euros(shipping)}</td></tr>`;const addr=addressLines(order.address);const addressBlock=addr.length?`<p style="margin:24px 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#737373">ENVÍO A</p><p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#111111">${addr.map(escapeHtml).join('<br>')}</p>`:'';
+ const details=`<p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#737373">PEDIDO ${safeId}</p><table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">${rows}${extra}<tr><td style="padding:18px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:700;color:#111111">TOTAL</td><td align="right" style="padding:18px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:18px;font-weight:700;color:#111111">${euros(order.total)}</td></tr></table>${addressBlock}`;
+ return {subject:`Pedido confirmado · ELYON ${order.id.slice(0,8)}`,text:`Hemos recibido el pago del pedido ${order.id}. Total: ${euros(order.total)} (envío ${shipping===0?'gratis':euros(shipping)}). ${DELIVERY} Consulta tu pedido en ${accountUrl()}`,html:brandedEmail({preheader:'Tu pedido ELYON está confirmado.',eyebrow:'Confirmación de pedido',title:'Gracias por elegir ELYON.',intro:'Hemos recibido correctamente tu pago. Te avisaremos en cuanto el pedido salga de nuestro almacén.',contentHtml:details,action:{label:'Ver mi pedido',url:accountUrl()},footer:`${DELIVERY} Conserva este correo como confirmación de tu compra. ¿Dudas? Responde a este correo.`,logoUrl:logoUrl()})};
 }
 
 export function verificationEmail(name:string,link:string){
@@ -43,7 +49,7 @@ export async function processOrderEmails(orderId?:string,limit=12){
  for(const item of results){
   const claim=await db.prepare("UPDATE outbox SET status='sending',attempts=attempts+1 WHERE id=? AND status='pending'").bind(item.id).run();if(!claim.meta.changes)continue;
   try{
-   const order=await db.prepare('SELECT id,email,total,status,tracking FROM orders WHERE id=?').bind(item.order_id).first<OrderRow>();
+   const order=await db.prepare('SELECT id,email,total,shipping,address,status,tracking FROM orders WHERE id=?').bind(item.order_id).first<OrderRow>();
    if(!order?.email||!/^\S+@\S+\.\S+$/.test(order.email))throw new Error('Order has no deliverable email');
    const {results:lines}=await db.prepare('SELECT name,quantity,unit_price FROM order_lines WHERE order_id=? ORDER BY rowid').bind(order.id).all<LineRow>();const content=message(order,lines,item.kind);
    await sendEmail({to:order.email,...content,idempotencyKey:`elyon-${item.id.replace(/[^a-zA-Z0-9_-]/g,'-')}`});await db.prepare("UPDATE outbox SET status='sent' WHERE id=? AND status='sending'").bind(item.id).run();sent++;
