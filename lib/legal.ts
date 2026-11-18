@@ -1,7 +1,7 @@
 /** Textos legales definitivos de ELYON. Se muestran tal cual en /legal/<slug>; no requieren publicación desde el panel. */
 export const LEGAL_UPDATED = '26 de septiembre de 2026';
 const EMAIL = 'elyonwearspain@gmail.com';
-const RETURNS_ADDRESS = 'ELYON – A/A Aitor Guillén Narbona. Estanco Royal, Camino del Albero, 28, 29651 Las Lagunas de Mijas (Málaga)';
+const RETURNS_ADDRESS = 'ELYON – Estanco Royal, Camino del Albero, 28, 29651 Las Lagunas de Mijas (Málaga)';
 
 export const legalPages = {
   'aviso-legal': {
