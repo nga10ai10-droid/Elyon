@@ -258,3 +258,17 @@ html,body{overflow-x:clip}
 .acc-detail .order-lines{margin:0;font-variant-numeric:tabular-nums}.acc-detail .order-lines .order-total{font-weight:700;border-bottom:0;padding-top:14px}
 .acc-detail .order-address{font-size:13px;color:var(--muted);margin:12px 0 0;max-width:60ch}
 @media(max-width:600px){.acc-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.account-dashboard .acc-head{padding-bottom:22px}}
+.admin-page .adm-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.admin-page .adm-head h1{font-size:clamp(28px,4vw,40px);line-height:1.05;margin:0 0 10px;letter-spacing:-.02em}
+.adm-state{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:650;padding:5px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+.adm-state::before{content:"";width:7px;height:7px;border-radius:50%;background:#b8b8b4}.adm-state[data-open=true]{border-color:#090909;color:#090909}.adm-state[data-open=true]::before{background:#1c9a55}
+.adm-msg{margin:18px 0 0;padding:12px 16px;background:var(--paper);font-size:13px}
+.admin-page nav{margin:22px 0 0}
+.adm-orders{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.adm-orders>li{border-bottom:1px solid var(--line)}
+.adm-orders summary{display:grid;grid-template-columns:minmax(120px,160px) 1fr auto 90px 90px;align-items:center;gap:14px;padding:14px 4px;cursor:pointer;list-style:none;min-height:44px;font-size:13px}
+.adm-orders summary::-webkit-details-marker{display:none}.adm-orders summary:hover{background:var(--paper)}.adm-orders summary:focus-visible{outline:2px solid #090909;outline-offset:-2px}
+.adm-ref{display:grid;gap:2px}.adm-ref small{color:var(--muted);font-size:11px}.adm-cust{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
+.adm-count{color:var(--muted);text-align:right}.adm-total{text-align:right;font-variant-numeric:tabular-nums}
+.adm-body{padding:6px 4px 24px;display:grid;gap:14px;font-size:13px}.adm-body ul{margin:0;padding-left:18px;line-height:1.8}
+@media(max-width:700px){.adm-orders summary{grid-template-columns:1fr auto;gap:6px 12px}.adm-cust{grid-column:1/-1;order:3}.adm-count{display:none}.adm-orders .admin-badge{justify-self:start;grid-column:1;order:2}.adm-total{grid-column:2;grid-row:1}}
