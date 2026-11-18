@@ -26,8 +26,8 @@ Envíos solo a España con GLS: 7 € por pedido, gratis desde 69,99 €. Prepar
 Minimalista: negro, blanco y gris; tipografía Inter muy gruesa en titulares; logo = pájaro "Y" + ELYON. Lema: "Evoluciona. Supérate." Tono sobrio: "sin gráficos que griten, sin promesas imposibles". No quiere que se hable de "drop" en la comunicación de la marca. No quiere salir él en vídeos.
 
 ## Estado y pendientes (nov 2026)
-- Prendas reales ya fabricadas: camisetas y **sudadera oversize negra, todo algodón** (logo pequeño delante, "ELYON" grande en la espalda). Las fotos de la web siguen siendo imágenes conceptuales hechas con IA; hay que sustituirlas por fotos reales.
-- Fotos limpias de la sudadera ya en `public/assets/products/sudadera-negro-frontal.webp` y `sudadera-negro-espalda.webp` (más versiones `-small`). **Falta añadir la sudadera al catálogo**: necesita precio (pendiente de Aitor), tallas y descripción.
+- Prendas reales ya fabricadas: camisetas y **sudadera oversize negra, 80 % algodón / 20 % poliéster reciclado, 320 g/m²** (logo pequeño delante, "ELYON" grande en la espalda). Las fotos de la web siguen siendo imágenes conceptuales hechas con IA; hay que sustituirlas por fotos reales.
+- Fotos limpias de la sudadera ya en `public/assets/products/sudadera-negro-frontal.webp` y `sudadera-negro-espalda.webp` (más versiones `-small`). Ya está en el catálogo (`sudadera-oversize`, 39,95 €, preview, categoría Sudaderas, tallas XS–XXL). Falta sustituir las fotos por imágenes del mismo estilo que el resto y confirmar los cuidados de lavado.
 - Revisar en Search Console las páginas no indexadas y en Merchant Center los avisos de productos.
 - Abrir ventas: configurar Stripe, webhook y correos (ver `README-ELYON.md`, "Antes de activar ventas").
 - Mejora continua de diseño y rendimiento móvil de la web.
