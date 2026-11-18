@@ -40,7 +40,7 @@ test('API: durable bag, ownership, invalid input, protected admin and closed che
  data=await (await get('customer-one','')).json();assert.equal(data.items.length,1,'same signed-in user can restore bag without cookie');
  res=await mf.dispatchFetch(root+'/api/checkout/status?session_id=cs_test_unknown');assert.equal(res.status,404);
  const admin=auth('owner-id','owner@example.invalid'),one=auth('customer-one','one@example.invalid'),two=auth('customer-two');
- res=await mf.dispatchFetch(root+'/api/admin',{headers:admin});assert.equal(res.status,200);data=await res.json();assert.equal(data.products.length,9);assert.equal(data.launchChecklist.length,5);assert.ok(!data.launchChecklist.some(c=>c.id==='business'||c.id==='legal'));assert.equal(data.config.emailReady,false);
+ res=await mf.dispatchFetch(root+'/api/admin',{headers:admin});assert.equal(res.status,200);data=await res.json();assert.equal(data.products.length,10);assert.equal(data.launchChecklist.length,5);assert.ok(!data.launchChecklist.some(c=>c.id==='business'||c.id==='legal'));assert.equal(data.config.emailReady,false);
  data=await (await post('/api/admin',{action:'process-email'},admin)).json();assert.equal(data.configured,false);
  assert.equal((await post('/api/auth/request',{email:'new@example.invalid'})).status,503,'email registration remains closed');
  assert.equal((await post('/api/auth/request',{}, {origin:'https://untrusted.example'})).status,403);
