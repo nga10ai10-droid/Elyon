@@ -71,9 +71,7 @@ export function AdminOrders({orders,busy,save}:{orders:AdminOrder[];busy:boolean
    <button className="btn" onClick={()=>exportCsv(list)} disabled={!list.length}>Exportar CSV ({list.length})</button>
   </div>
   {!list.length&&<p>No hay pedidos {filter==='todo'&&!q?'todavía':'con este filtro'}.</p>}
-  {list.map(o=>{const a=parseAddress(o.address||'');return <article className="admin-order" key={o.id}>
-   <h3>{ref(o.id)} · {euros(o.total)} <span className={'admin-badge s-'+o.status}>{ORDER_STATUS[o.status]||o.status}</span></h3>
-   <p><small>{day(o.created)}</small> · {o.email?<a className="text-button" href={'mailto:'+o.email}>{o.email}</a>:'Correo pendiente de pago'}</p>
+  {!!list.length&&<ul className="adm-orders">{list.map(o=>{const a=parseAddress(o.address||'');const n=o.lines.reduce((m,l)=>m+l.quantity,0);return <li key={o.id}><details><summary><span className="adm-ref"><strong>{ref(o.id)}</strong><small>{day(o.created)}</small></span><span className="adm-cust">{o.email||'Correo pendiente de pago'}</span><span className={'admin-badge s-'+o.status}>{ORDER_STATUS[o.status]||o.status}</span><span className="adm-count">{n} {n===1?'prenda':'prendas'}</span><b className="adm-total">{euros(o.total)}</b></summary><div className="adm-body">
    <ul>{o.lines.map(l=><li key={l.sku}>{l.quantity} × {l.name} <small>({l.sku.split(':').slice(1).join(' · ')})</small> · {euros(l.unit_price)}</li>)}{!!o.shipping&&<li>Envío · {euros(o.shipping)}</li>}</ul>
    {a&&<address style={{fontStyle:'normal'}}><strong>{a.name}</strong>{a.lines.map(l=><span key={l} style={{display:'block'}}>{l}</span>)}<button className="text-button" type="button" onClick={()=>navigator.clipboard?.writeText([a.name,...a.lines].join('\n'))}>Copiar dirección</button></address>}
    {o.tracking&&<p>Seguimiento GLS: <a className="text-button" target="_blank" rel="noreferrer" href={'https://gls-group.com/ES/es/seguimiento-envio?match='+encodeURIComponent(o.tracking)}>{o.tracking}</a></p>}
@@ -81,7 +79,6 @@ export function AdminOrders({orders,busy,save}:{orders:AdminOrder[];busy:boolean
    <div className="admin-actions">
     {o.status==='shipped'&&<button className="btn" disabled={busy} onClick={()=>setStatus(o,'delivered')}>Marcar entregado</button>}
     {['paid','shipped','delivered'].includes(o.status)&&<button className="text-button" disabled={busy} onClick={()=>setStatus(o,'returned')}>Registrar devolución</button>}
-   </div>
-  </article>})}
+   </div></div></details></li>})}</ul>}
  </section>
 }
